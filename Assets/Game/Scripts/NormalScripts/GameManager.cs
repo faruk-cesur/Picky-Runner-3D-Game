@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ public class GameManager : MonoBehaviour
                 case GameState.FinishGame:
                     break;
                 default:
-                    break;
+                    throw new ArgumentOutOfRangeException(nameof(value), value, null);
             }
 
             _currentGameState = value;
