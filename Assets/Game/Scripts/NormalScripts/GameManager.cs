@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -61,5 +62,21 @@ public class GameManager : MonoBehaviour
     {
         CurrentGameState = GameState.MainGame;
         AnimationController.instance.ActivateRunAnim();
+    }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
+    }
+    public void NextLevel()
+    {
+        SceneManager.LoadScene(0);
+    }
+    private void GameOver()
+    {
+        UIManager.instance.GameOverPanel();
+    }
+    private void Win()
+    {
+        UIManager.instance.FinishGamePanel();
     }
 }
