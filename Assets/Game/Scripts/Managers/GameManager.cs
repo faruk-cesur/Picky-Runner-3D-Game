@@ -15,7 +15,6 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public static Camera Cam;
 
     private GameState _currentGameState;
 
@@ -44,7 +43,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Cam = Camera.main;
 
         if (Instance == null)
         {
