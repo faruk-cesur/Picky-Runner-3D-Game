@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
         switch (GameManager.Instance.CurrentGameState)
         {
             case GameState.Prepare:
+                AnimationController.instance.ActivateIdleAnim();
                 break;
             case GameState.MainGame:
                 PlayerMovement();

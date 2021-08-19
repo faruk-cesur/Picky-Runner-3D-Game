@@ -56,4 +56,10 @@ public class GameManager : MonoBehaviour
 
         CurrentGameState = GameState.Prepare;
     }
+
+    public void StartGame()
+    {
+        CurrentGameState = GameState.MainGame;
+        AnimationController.instance.ActivateRunAnim();
+    }
 }
