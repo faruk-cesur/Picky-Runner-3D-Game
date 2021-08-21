@@ -41,4 +41,31 @@ public class AnimationController : MonoBehaviour
         animator.SetBool("running", false);
         animator.SetBool("victory", true);
     }
+
+    public IEnumerator ActivateJumpAnim()
+    {
+        animator.SetBool("running",false);
+        animator.SetBool("jump",true);
+        yield return new WaitForSeconds(1f);
+        animator.SetBool("running",true);
+        animator.SetBool("jump",false);
+    }
+    
+    public IEnumerator ActivateSlideAnim()
+    {
+        animator.SetBool("running",false);
+        animator.SetBool("slide",true);
+        yield return new WaitForSeconds(1f);
+        animator.SetBool("running",true);
+        animator.SetBool("slide",false);
+    }
+
+    public IEnumerator ActivateWallBreakAnim()
+    {
+        animator.SetBool("running", false);
+        animator.SetBool("wallstrike", true);
+        yield return new WaitForSeconds(2f);
+        animator.SetBool("running", true);
+        animator.SetBool("wallstrike", false);
+    }
 }

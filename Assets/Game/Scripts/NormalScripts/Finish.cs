@@ -10,6 +10,10 @@ public class Finish : MonoBehaviour
         PlayerController player = other.GetComponentInParent<PlayerController>();
         if (player)
         {
+            AnimationController.instance.ActivateVictoryAnim();
+            player.PlayerSpeedDown();
+            GameManager.Instance.Win();
+            GameManager.Instance.CurrentGameState = GameState.FinishGame;
         }
     }
 }
