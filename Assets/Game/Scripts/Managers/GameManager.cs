@@ -69,11 +69,11 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
-    public void GameOver()
+    private void GameOver()
     {
         UIManager.instance.GameOverPanel();
     }
-    public void Win()
+    private void Win()
     {
         UIManager.instance.FinishGamePanel();
     }

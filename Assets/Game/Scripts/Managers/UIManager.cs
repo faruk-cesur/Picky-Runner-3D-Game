@@ -7,7 +7,6 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     [SerializeField] private GameObject prepareScene, gamePlayScene, gameOverScene, finalScene;
-    public Slider specialPowerSlider;
 
     private void Awake()
     {
