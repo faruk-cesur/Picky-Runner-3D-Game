@@ -7,7 +7,8 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    public Slider specialPowerSlider;
+    public Slider energySlider;
+    public GameObject energySliderForFinish;
 
     [SerializeField] private GameObject prepareScene, gamePlayScene, gameOverScene, finalScene;
 

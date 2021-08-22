@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
         if (collectable)
         {
             _specialPower++;
-            UIManager.Instance.specialPowerSlider.value = _specialPower;
+            UIManager.Instance.energySlider.value = _specialPower;
             Destroy(other.gameObject);
         }
     }
