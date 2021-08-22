@@ -21,13 +21,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject yellowCapObject;
     [SerializeField] private GameObject lifeBuoyObject;
 
-    private GameObject _currentItem;
-
-    private bool _isBreakable;
-    private bool _isSelectedDoor;
-    private bool _isJumped;
-
-    private int _specialPower;
+    private bool _isWallBreakable;
+    private bool _isPlayerSelectedDoor;
+    private bool _isPlayerJumped;
+    private bool _isPlayerMoved;
 
     private void Start()
     {
@@ -95,7 +92,7 @@ public class PlayerController : MonoBehaviour
         RayfireRigid wall = other.GetComponentInParent<RayfireRigid>();
         if (wall)
         {
-            if (!_isBreakable)
+            if (!_isWallBreakable)
             {
                 runSpeed = 0;
                 GameManager.Instance.GameOver();
@@ -106,73 +103,86 @@ public class PlayerController : MonoBehaviour
                 Invoke(nameof(DisappearObjects), 2f);
                 StartCoroutine(PlayerWallStrike());
                 StartCoroutine(AnimationController.Instance.ActivateWallBreakAnim());
-                _isSelectedDoor = false;
+                _isPlayerSelectedDoor = false;
+                Destroy(other.gameObject,6);
             }
         }
 
         BaseballDoor baseballDoor = other.GetComponentInParent<BaseballDoor>();
         if (baseballDoor)
         {
-            if (_isSelectedDoor == false)
+            if (_isPlayerSelectedDoor == false)
             {
-                _isBreakable = true;
+                _isWallBreakable = true;
                 baseballObject.SetActive(true);
-                _isSelectedDoor = true;
+                _isPlayerSelectedDoor = true;
             }
         }
 
         AxeDoor axeDoor = other.GetComponentInParent<AxeDoor>();
         if (axeDoor)
         {
-            if (_isSelectedDoor == false)
+            if (_isPlayerSelectedDoor == false)
             {
-                _isBreakable = true;
+                _isWallBreakable = true;
                 axeObject.SetActive(true);
-                _isSelectedDoor = true;
+                _isPlayerSelectedDoor = true;
             }
         }
 
         YellowCapDoor yellowCapDoor = other.GetComponentInParent<YellowCapDoor>();
         if (yellowCapDoor)
         {
-            if (_isSelectedDoor == false)
+            if (_isPlayerSelectedDoor == false)
             {
-                _isBreakable = false;
+                _isWallBreakable = false;
                 yellowCapObject.SetActive(true);
-                _isSelectedDoor = true;
+                _isPlayerSelectedDoor = true;
             }
         }
 
         LifeBuoyDoor lifeBuoyDoor = other.GetComponentInParent<LifeBuoyDoor>();
         if (lifeBuoyDoor)
         {
-            if (_isSelectedDoor == false)
+            if (_isPlayerSelectedDoor == false)
             {
-                _isBreakable = false;
+                _isWallBreakable = false;
                 lifeBuoyObject.SetActive(true);
-                _isSelectedDoor = true;
+                _isPlayerSelectedDoor = true;
             }
         }
 
         JumpPlatform jumpPlatform = other.GetComponentInParent<JumpPlatform>();
         if (jumpPlatform)
         {
-            StartCoroutine(AnimationController.Instance.ActivateJumpAnim());
-            StartCoroutine(JumpPosition());
+            if (!_isPlayerMoved)
+            {
+                UIManager.Instance.energySlider.value--;
+                UIManager.Instance.EnergySliderStars();
+                StartCoroutine(AnimationController.Instance.ActivateJumpAnim());
+                StartCoroutine(JumpPosition());
+                StartCoroutine(PlayerMovingBool());
+            }
         }
 
         SlidePlatform slidePlatform = other.GetComponentInParent<SlidePlatform>();
         if (slidePlatform)
         {
-            StartCoroutine(AnimationController.Instance.ActivateSlideAnim());
+            if (!_isPlayerMoved)
+            {
+                UIManager.Instance.energySlider.value--;
+                UIManager.Instance.EnergySliderStars();
+                StartCoroutine(AnimationController.Instance.ActivateSlideAnim());
+                StartCoroutine(PlayerMovingBool());
+            }
         }
 
 
         Collectable collectable = other.GetComponentInParent<Collectable>();
         if (collectable)
         {
-            _specialPower++;
-            UIManager.Instance.energySlider.value = _specialPower;
+            UIManager.Instance.energySlider.value++;
+            UIManager.Instance.EnergySliderStars();
             Destroy(other.gameObject);
         }
     }
@@ -189,6 +199,7 @@ public class PlayerController : MonoBehaviour
         axeObject.SetActive(false);
         lifeBuoyObject.SetActive(false);
     }
+
 
     private IEnumerator FinishGame()
     {
@@ -220,21 +231,28 @@ public class PlayerController : MonoBehaviour
         runSpeed = 10;
         playerModelChild.transform.rotation = Quaternion.identity;
         playerModelChild.transform.localPosition = new Vector3(0, 0, 0);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     private IEnumerator JumpPosition()
     {
-        if (!_isJumped)
+        if (!_isPlayerJumped)
         {
-            _isJumped = true;
+            _isPlayerJumped = true;
             gameObject.GetComponent<Rigidbody>().velocity = Vector3.up * 13;
             yield return new WaitForSeconds(0.5f);
             gameObject.GetComponent<Rigidbody>().velocity = Vector3.down * 10;
-            _isJumped = false;
+            _isPlayerJumped = false;
             yield return new WaitForSeconds(1f);
             gameObject.transform.position = new Vector3(0, 0, transform.position.z);
         }
+    }
+
+    private IEnumerator PlayerMovingBool()
+    {
+        _isPlayerMoved = true;
+        yield return new WaitForSeconds(1f);
+        _isPlayerMoved = false;
     }
 }

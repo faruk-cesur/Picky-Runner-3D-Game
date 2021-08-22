@@ -49,7 +49,6 @@ public class Finish : MonoBehaviour
         {
             player.PlayerSpeedDown();
             player.finishCam = true;
-            UIManager.Instance.energySliderForFinish.SetActive(false);
             UIManager.Instance.FinishGamePanel();
             AnimationController.Instance.ActivateVictoryAnim();
             GameManager.Instance.CurrentGameState = GameState.FinishGame;
