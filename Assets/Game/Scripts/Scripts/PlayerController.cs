@@ -8,6 +8,7 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerController : MonoBehaviour
 {
+    [HideInInspector] public bool finishCam;
     [SerializeField] private float runSpeed;
     [SerializeField] private float slideSpeed;
     [SerializeField] private float maxSlideAmount;
