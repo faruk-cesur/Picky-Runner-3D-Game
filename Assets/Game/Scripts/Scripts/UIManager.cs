@@ -33,7 +33,6 @@ public class UIManager : MonoBehaviour
                 PrepareGame();
                 break;
             case GameState.MainGame:
-                GamePlay();
                 break;
             case GameState.GameOver:
                 break;
