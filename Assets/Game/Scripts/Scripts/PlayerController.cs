@@ -114,18 +114,18 @@ public class PlayerController : MonoBehaviour
         TriggerAttack triggerAttack = other.GetComponentInParent<TriggerAttack>();
         if (triggerAttack)
         {
-            if (_isTriggerAttack == false)
+            if (!_isTriggerAttack && _isWallBreakable)
             {
                 StartCoroutine(TriggerAttackBool());
                 StartCoroutine(AnimationController.Instance.ActivateAttackAnim());
-                StartCoroutine(PlayerAttackRootMotion());
+                StartCoroutine(PlayerAttackBreakWall());
             }
         }
 
         BaseballDoor baseballDoor = other.GetComponentInParent<BaseballDoor>();
         if (baseballDoor)
         {
-            if (_isPlayerSelectedDoor == false)
+            if (!_isPlayerSelectedDoor)
             {
                 _isWallBreakable = true;
                 baseballObject.SetActive(true);
@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
         AxeDoor axeDoor = other.GetComponentInParent<AxeDoor>();
         if (axeDoor)
         {
-            if (_isPlayerSelectedDoor == false)
+            if (!_isPlayerSelectedDoor)
             {
                 _isWallBreakable = true;
                 axeObject.SetActive(true);
@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
         YellowCapDoor yellowCapDoor = other.GetComponentInParent<YellowCapDoor>();
         if (yellowCapDoor)
         {
-            if (_isPlayerSelectedDoor == false)
+            if (!_isPlayerSelectedDoor)
             {
                 _isWallBreakable = false;
                 yellowCapObject.SetActive(true);
@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour
         LifeBuoyDoor lifeBuoyDoor = other.GetComponentInParent<LifeBuoyDoor>();
         if (lifeBuoyDoor)
         {
-            if (_isPlayerSelectedDoor == false)
+            if (!_isPlayerSelectedDoor)
             {
                 _isWallBreakable = false;
                 lifeBuoyObject.SetActive(true);
@@ -188,6 +188,7 @@ public class PlayerController : MonoBehaviour
                 UIManager.Instance.EnergySliderStars();
                 StartCoroutine(AnimationController.Instance.ActivateSlideAnim());
                 StartCoroutine(PlayerMovingBool());
+                StartCoroutine(PlayerSlidePositionY());
             }
         }
 
@@ -261,7 +262,15 @@ public class PlayerController : MonoBehaviour
         _isTriggerAttack = false;
     }
 
-    private IEnumerator PlayerAttackRootMotion()
+    private IEnumerator PlayerSlidePositionY()
+    {
+        yield return new WaitForSeconds(0.20f);
+        playerModelChild.transform.localPosition = new Vector3(0, -0.5f, 0);
+        yield return new WaitForSeconds(0.8f);
+        playerModelChild.transform.localPosition = new Vector3(0, 0, 0);
+    }
+
+    private IEnumerator PlayerAttackBreakWall()
     {
         runSpeed = 0;
         playerModelChild.GetComponent<Animator>().applyRootMotion = true;
