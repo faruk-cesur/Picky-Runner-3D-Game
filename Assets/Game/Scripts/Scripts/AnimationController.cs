@@ -62,12 +62,13 @@ public class AnimationController : MonoBehaviour
         animator.SetBool("slide", false);
     }
 
-    public IEnumerator ActivateWallBreakAnim()
+    public IEnumerator ActivateAttackAnim()
     {
+        animator.SetBool("attack", true);
         animator.SetBool("running", false);
-        animator.SetBool("wallstrike", true);
         yield return new WaitForSeconds(2f);
+        animator.SetBool("attack", false);
         animator.SetBool("running", true);
-        animator.SetBool("wallstrike", false);
+
     }
 }

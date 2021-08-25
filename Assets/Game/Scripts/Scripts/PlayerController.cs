@@ -21,10 +21,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject yellowCapObject;
     [SerializeField] private GameObject lifeBuoyObject;
 
+    [SerializeField] private RayfireRigid rayfireRigid;
+
     private bool _isWallBreakable;
     private bool _isPlayerSelectedDoor;
     private bool _isPlayerJumped;
     private bool _isPlayerMoved;
+    private bool _isTriggerAttack;
+
 
     private void Start()
     {
@@ -60,6 +64,7 @@ public class PlayerController : MonoBehaviour
 
     private float mousePosX;
     private float playerVisualPosX;
+
 
     private void HorizontalMovement(float slideSpeed)
     {
@@ -100,11 +105,20 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Invoke(nameof(DisappearObjects), 2f);
-                StartCoroutine(PlayerWallStrike());
-                StartCoroutine(AnimationController.Instance.ActivateWallBreakAnim());
+                Invoke(nameof(DisappearObjects), 1f);
                 _isPlayerSelectedDoor = false;
-                Destroy(other.gameObject,6);
+                Destroy(other.gameObject, 6);
+            }
+        }
+
+        TriggerAttack triggerAttack = other.GetComponentInParent<TriggerAttack>();
+        if (triggerAttack)
+        {
+            if (_isTriggerAttack == false)
+            {
+                StartCoroutine(TriggerAttackBool());
+                StartCoroutine(AnimationController.Instance.ActivateAttackAnim());
+                StartCoroutine(PlayerAttackRootMotion());
             }
         }
 
@@ -219,22 +233,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    private IEnumerator PlayerWallStrike()
-    {
-        runSpeed = 0;
-        playerModelChild.transform.rotation = Quaternion.Euler(0, 110, 0);
-        playerModelChild.GetComponent<Animator>().applyRootMotion = true;
-        gameObject.GetComponent<Rigidbody>().isKinematic = true;
-        yield return new WaitForSeconds(2f);
-        playerModelChild.GetComponent<Animator>().applyRootMotion = false;
-        runSpeed = 10;
-        playerModelChild.transform.rotation = Quaternion.identity;
-        playerModelChild.transform.localPosition = new Vector3(0, 0, 0);
-        yield return new WaitForSeconds(3f);
-        gameObject.GetComponent<Rigidbody>().isKinematic = false;
-    }
-
     private IEnumerator JumpPosition()
     {
         if (!_isPlayerJumped)
@@ -254,5 +252,35 @@ public class PlayerController : MonoBehaviour
         _isPlayerMoved = true;
         yield return new WaitForSeconds(1f);
         _isPlayerMoved = false;
+    }
+
+    private IEnumerator TriggerAttackBool()
+    {
+        _isTriggerAttack = true;
+        yield return new WaitForSeconds(1f);
+        _isTriggerAttack = false;
+    }
+
+    private IEnumerator PlayerAttackRootMotion()
+    {
+        runSpeed = 0;
+        playerModelChild.GetComponent<Animator>().applyRootMotion = true;
+        gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+        yield return new WaitForSeconds(1.55f);
+
+        rayfireRigid.Initialize();
+        rayfireRigid.Fade();
+        runSpeed = 10;
+        playerModelChild.GetComponent<Animator>().applyRootMotion = false;
+        playerModelChild.transform.rotation = Quaternion.identity;
+
+        yield return new WaitForSeconds(1.25f);
+
+        playerModelChild.transform.localPosition = new Vector3(0, 0, 0);
+
+        yield return new WaitForSeconds(2f);
+
+        gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
 }
