@@ -8,7 +8,10 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerController : MonoBehaviour
 {
+    #region Fields
+    
     [HideInInspector] public bool finishCam;
+    
     [SerializeField] private float runSpeed;
     [SerializeField] private float slideSpeed;
     [SerializeField] private float maxSlideAmount;
@@ -27,7 +30,10 @@ public class PlayerController : MonoBehaviour
     private bool _isPlayerSelectedDoor;
     private bool _isPlayerJumped;
     private bool _isPlayerMoved;
+    private bool _isPlayerUsedEnergy;
     private bool _isTriggerAttack;
+    
+    #endregion
 
 
     private void Start()
@@ -90,7 +96,8 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-
+    
+    #region PlayerTriggerEvents
 
     private void OnTriggerEnter(Collider other)
     {
@@ -99,9 +106,7 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isWallBreakable)
             {
-                runSpeed = 0;
-                GameManager.Instance.GameOver();
-                AnimationController.Instance.ActivateDeathAnim();
+                PlayerDeath();
             }
             else
             {
@@ -171,8 +176,6 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isPlayerMoved)
             {
-                UIManager.Instance.energySlider.value--;
-                UIManager.Instance.EnergySliderStars();
                 StartCoroutine(AnimationController.Instance.ActivateJumpAnim());
                 StartCoroutine(JumpPosition());
                 StartCoroutine(PlayerMovingBool());
@@ -184,11 +187,51 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isPlayerMoved)
             {
-                UIManager.Instance.energySlider.value--;
-                UIManager.Instance.EnergySliderStars();
                 StartCoroutine(AnimationController.Instance.ActivateSlideAnim());
                 StartCoroutine(PlayerMovingBool());
                 StartCoroutine(PlayerSlidePositionY());
+            }
+        }
+
+        SlidePlatformBlue slidePlatformBlue = other.GetComponentInParent<SlidePlatformBlue>();
+        if (slidePlatformBlue)
+        {
+            if (UIManager.Instance.energySlider.value < 1)
+            {
+                PlayerDeath();
+            }
+            else if (!_isPlayerUsedEnergy)
+            {
+                UIManager.Instance.energySlider.value--;
+                UpdateEnergyStars();
+            }
+        }
+
+        SlidePlatformBlack slidePlatformBlack = other.GetComponentInParent<SlidePlatformBlack>();
+        if (slidePlatformBlack)
+        {
+            if (UIManager.Instance.energySlider.value < 2)
+            {
+                PlayerDeath();
+            }
+            else if (!_isPlayerUsedEnergy)
+            {
+                UIManager.Instance.energySlider.value -= 2;
+                UpdateEnergyStars();
+            }
+        }
+
+        SlidePlatformRed slidePlatformRed = other.GetComponentInParent<SlidePlatformRed>();
+        if (slidePlatformRed)
+        {
+            if (UIManager.Instance.energySlider.value < 3)
+            {
+                PlayerDeath();
+            }
+            else if (!_isPlayerUsedEnergy)
+            {
+                UIManager.Instance.energySlider.value -= 3;
+                UpdateEnergyStars();
             }
         }
 
@@ -201,6 +244,10 @@ public class PlayerController : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
+
+    #endregion
+
+    #region Methods
 
     public void PlayerSpeedDown()
     {
@@ -215,6 +262,22 @@ public class PlayerController : MonoBehaviour
         lifeBuoyObject.SetActive(false);
     }
 
+    private void PlayerDeath()
+    {
+        runSpeed = 0;
+        GameManager.Instance.GameOver();
+        AnimationController.Instance.ActivateDeathAnim();
+    }
+
+    private void UpdateEnergyStars()
+    {
+        UIManager.Instance.EnergySliderStars();
+        StartCoroutine(PlayerUsedEnergyBool());
+    }
+
+    #endregion
+
+    #region Coroutines
 
     private IEnumerator FinishGame()
     {
@@ -262,6 +325,13 @@ public class PlayerController : MonoBehaviour
         _isTriggerAttack = false;
     }
 
+    private IEnumerator PlayerUsedEnergyBool()
+    {
+        _isPlayerUsedEnergy = true;
+        yield return new WaitForSeconds(1f);
+        _isPlayerUsedEnergy = false;
+    }
+
     private IEnumerator PlayerSlidePositionY()
     {
         yield return new WaitForSeconds(0.20f);
@@ -292,4 +362,6 @@ public class PlayerController : MonoBehaviour
 
         gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
+
+    #endregion
 }
