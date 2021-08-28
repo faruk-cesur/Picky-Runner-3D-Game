@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(PlayerMovingBool());
                 StartCoroutine(PlayerSlidePositionY());
                 CameraManager.Instance.isSlideCamera = false;
-                Destroy(other.gameObject, 1f);
+                Destroy(other.gameObject, 0.8f);
             }
         }
 
@@ -254,8 +254,15 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(PlayerSlideJumpBool());
             }
         }
-
-
+        
+        CompleteStarBuff completeStarBuff = other.GetComponentInParent<CompleteStarBuff>();
+        if (completeStarBuff)
+        {
+            UIManager.Instance.energySlider.value += 5;
+            UIManager.Instance.EnergySliderStars();
+            Destroy(other.gameObject);
+        }
+        
         Collectable collectable = other.GetComponentInParent<Collectable>();
         if (collectable)
         {

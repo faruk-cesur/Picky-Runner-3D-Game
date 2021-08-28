@@ -128,7 +128,7 @@ public class CameraManager : MonoBehaviour
     private IEnumerator SlideCameraBool()
     {
         mainGameCam.localPosition = Vector3.Lerp(mainGameCam.localPosition,
-            new Vector3(0f, 3f, 3f), Time.deltaTime * 2.5f);
+            new Vector3(0f, 3f, -5f), Time.deltaTime * 2.5f);
 
         yield return new WaitForSeconds(1f);
 
