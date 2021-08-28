@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     private bool _isPlayerSelectedDoor;
     private bool _isPlayerJumped;
     private bool _isPlayerMoved;
-    private bool _isPlayerSlide;
+    private bool _isPlayerSlideJump;
     private bool _isPlayerUsedEnergy;
     private bool _isTriggerAttack;
 
@@ -198,10 +198,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        SlidePlatformBlue slidePlatformBlue = other.GetComponentInParent<SlidePlatformBlue>();
-        if (slidePlatformBlue)
+        SlideJumpPlatformBlue slideJumpPlatformBlue = other.GetComponentInParent<SlideJumpPlatformBlue>();
+        if (slideJumpPlatformBlue)
         {
-            if (!_isPlayerSlide)
+            if (!_isPlayerSlideJump)
             {
                 if (UIManager.Instance.energySlider.value < 1)
                 {
@@ -213,14 +213,14 @@ public class PlayerController : MonoBehaviour
                     UpdateEnergyStars();
                 }
 
-                StartCoroutine(PlayerSlidingBool());
+                StartCoroutine(PlayerSlideJumpBool());
             }
         }
 
-        SlidePlatformBlack slidePlatformBlack = other.GetComponentInParent<SlidePlatformBlack>();
-        if (slidePlatformBlack)
+        SlideJumpPlatformPurple slideJumpPlatformPurple = other.GetComponentInParent<SlideJumpPlatformPurple>();
+        if (slideJumpPlatformPurple)
         {
-            if (!_isPlayerSlide)
+            if (!_isPlayerSlideJump)
             {
                 if (UIManager.Instance.energySlider.value < 2)
                 {
@@ -232,14 +232,14 @@ public class PlayerController : MonoBehaviour
                     UpdateEnergyStars();
                 }
 
-                StartCoroutine(PlayerSlidingBool());
+                StartCoroutine(PlayerSlideJumpBool());
             }
         }
 
-        SlidePlatformRed slidePlatformRed = other.GetComponentInParent<SlidePlatformRed>();
-        if (slidePlatformRed)
+        SlideJumpPlatformRed slideJumpPlatformRed = other.GetComponentInParent<SlideJumpPlatformRed>();
+        if (slideJumpPlatformRed)
         {
-            if (!_isPlayerSlide)
+            if (!_isPlayerSlideJump)
             {
                 if (UIManager.Instance.energySlider.value < 3)
                 {
@@ -251,7 +251,7 @@ public class PlayerController : MonoBehaviour
                     UpdateEnergyStars();
                 }
 
-                StartCoroutine(PlayerSlidingBool());
+                StartCoroutine(PlayerSlideJumpBool());
             }
         }
 
@@ -338,11 +338,11 @@ public class PlayerController : MonoBehaviour
         _isPlayerMoved = false;
     }
 
-    private IEnumerator PlayerSlidingBool()
+    private IEnumerator PlayerSlideJumpBool()
     {
-        _isPlayerSlide = true;
+        _isPlayerSlideJump = true;
         yield return new WaitForSeconds(1f);
-        _isPlayerSlide = false;
+        _isPlayerSlideJump = false;
     }
 
     private IEnumerator TriggerAttackBool()
