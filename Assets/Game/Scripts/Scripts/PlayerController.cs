@@ -198,8 +198,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        SlideJumpPlatformBlue slideJumpPlatformBlue = other.GetComponentInParent<SlideJumpPlatformBlue>();
-        if (slideJumpPlatformBlue)
+        PlatformOneStar platformOneStar = other.GetComponentInParent<PlatformOneStar>();
+        if (platformOneStar)
         {
             if (!_isPlayerSlideJump)
             {
@@ -217,8 +217,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        SlideJumpPlatformPurple slideJumpPlatformPurple = other.GetComponentInParent<SlideJumpPlatformPurple>();
-        if (slideJumpPlatformPurple)
+        PlatformTwoStars platformTwoStars = other.GetComponentInParent<PlatformTwoStars>();
+        if (platformTwoStars)
         {
             if (!_isPlayerSlideJump)
             {
@@ -236,8 +236,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        SlideJumpPlatformRed slideJumpPlatformRed = other.GetComponentInParent<SlideJumpPlatformRed>();
-        if (slideJumpPlatformRed)
+        PlatformThreeStars platformThreeStars = other.GetComponentInParent<PlatformThreeStars>();
+        if (platformThreeStars)
         {
             if (!_isPlayerSlideJump)
             {
