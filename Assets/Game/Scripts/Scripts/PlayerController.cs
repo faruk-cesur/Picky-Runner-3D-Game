@@ -3,15 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using RayFire;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Debug = UnityEngine.Debug;
 
 public class PlayerController : MonoBehaviour
 {
     #region Fields
-    
+
     [HideInInspector] public bool finishCam;
-    
+
     [SerializeField] private float runSpeed;
     [SerializeField] private float slideSpeed;
     [SerializeField] private float maxSlideAmount;
@@ -30,9 +32,10 @@ public class PlayerController : MonoBehaviour
     private bool _isPlayerSelectedDoor;
     private bool _isPlayerJumped;
     private bool _isPlayerMoved;
+    private bool _isPlayerSlide;
     private bool _isPlayerUsedEnergy;
     private bool _isTriggerAttack;
-    
+
     #endregion
 
 
@@ -96,7 +99,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-    
+
     #region PlayerTriggerEvents
 
     private void OnTriggerEnter(Collider other)
@@ -190,48 +193,65 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(AnimationController.Instance.ActivateSlideAnim());
                 StartCoroutine(PlayerMovingBool());
                 StartCoroutine(PlayerSlidePositionY());
+                CameraManager.Instance.isSlideCamera = false;
+                Destroy(other.gameObject, 1f);
             }
         }
 
         SlidePlatformBlue slidePlatformBlue = other.GetComponentInParent<SlidePlatformBlue>();
         if (slidePlatformBlue)
         {
-            if (UIManager.Instance.energySlider.value < 1)
+            if (!_isPlayerSlide)
             {
-                PlayerDeath();
-            }
-            else if (!_isPlayerUsedEnergy)
-            {
-                UIManager.Instance.energySlider.value--;
-                UpdateEnergyStars();
+                if (UIManager.Instance.energySlider.value < 1)
+                {
+                    PlayerDeath();
+                }
+                else if (!_isPlayerUsedEnergy)
+                {
+                    UIManager.Instance.energySlider.value--;
+                    UpdateEnergyStars();
+                }
+
+                StartCoroutine(PlayerSlidingBool());
             }
         }
 
         SlidePlatformBlack slidePlatformBlack = other.GetComponentInParent<SlidePlatformBlack>();
         if (slidePlatformBlack)
         {
-            if (UIManager.Instance.energySlider.value < 2)
+            if (!_isPlayerSlide)
             {
-                PlayerDeath();
-            }
-            else if (!_isPlayerUsedEnergy)
-            {
-                UIManager.Instance.energySlider.value -= 2;
-                UpdateEnergyStars();
+                if (UIManager.Instance.energySlider.value < 2)
+                {
+                    PlayerDeath();
+                }
+                else if (!_isPlayerUsedEnergy)
+                {
+                    UIManager.Instance.energySlider.value -= 2;
+                    UpdateEnergyStars();
+                }
+
+                StartCoroutine(PlayerSlidingBool());
             }
         }
 
         SlidePlatformRed slidePlatformRed = other.GetComponentInParent<SlidePlatformRed>();
         if (slidePlatformRed)
         {
-            if (UIManager.Instance.energySlider.value < 3)
+            if (!_isPlayerSlide)
             {
-                PlayerDeath();
-            }
-            else if (!_isPlayerUsedEnergy)
-            {
-                UIManager.Instance.energySlider.value -= 3;
-                UpdateEnergyStars();
+                if (UIManager.Instance.energySlider.value < 3)
+                {
+                    PlayerDeath();
+                }
+                else if (!_isPlayerUsedEnergy)
+                {
+                    UIManager.Instance.energySlider.value -= 3;
+                    UpdateEnergyStars();
+                }
+
+                StartCoroutine(PlayerSlidingBool());
             }
         }
 
@@ -316,6 +336,13 @@ public class PlayerController : MonoBehaviour
         _isPlayerMoved = true;
         yield return new WaitForSeconds(1f);
         _isPlayerMoved = false;
+    }
+
+    private IEnumerator PlayerSlidingBool()
+    {
+        _isPlayerSlide = true;
+        yield return new WaitForSeconds(1f);
+        _isPlayerSlide = false;
     }
 
     private IEnumerator TriggerAttackBool()
