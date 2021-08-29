@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        UIManager.Instance.GameOverPanel();
+        StartCoroutine(UIManager.Instance.DurationGameOverUI());
     }
 
     public void Win()

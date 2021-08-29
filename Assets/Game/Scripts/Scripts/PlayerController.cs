@@ -204,6 +204,8 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isPlayerSlideJump)
             {
+                UIManager.Instance.gold += 1;
+
                 if (UIManager.Instance.energySlider.value < 1)
                 {
                     PlayerDeath();
@@ -223,6 +225,8 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isPlayerSlideJump)
             {
+                UIManager.Instance.gold += 2;
+
                 if (UIManager.Instance.energySlider.value < 2)
                 {
                     PlayerDeath();
@@ -242,6 +246,8 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isPlayerSlideJump)
             {
+                UIManager.Instance.gold += 3;
+
                 if (UIManager.Instance.energySlider.value < 3)
                 {
                     PlayerDeath();
@@ -255,7 +261,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(PlayerSlideJumpBool());
             }
         }
-        
+
         CompleteStarBuff completeStarBuff = other.GetComponentInParent<CompleteStarBuff>();
         if (completeStarBuff)
         {
@@ -263,7 +269,7 @@ public class PlayerController : MonoBehaviour
             UIManager.Instance.EnergySliderStars();
             Destroy(other.gameObject);
         }
-        
+
         Collectable collectable = other.GetComponentInParent<Collectable>();
         if (collectable)
         {
@@ -388,6 +394,7 @@ public class PlayerController : MonoBehaviour
         runSpeed = 10;
         playerModelChild.GetComponent<Animator>().applyRootMotion = false;
         playerModelChild.transform.rotation = Quaternion.identity;
+        UIManager.Instance.gold += 10;
 
         yield return new WaitForSeconds(1.25f);
 

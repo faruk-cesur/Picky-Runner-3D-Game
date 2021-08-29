@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
     public List<GameObject> yellowStars;
     [HideInInspector] public int sliderLevel = 1;
     [HideInInspector] public int gold;
-    
+
     [SerializeField] private GameObject prepareScene, gamePlayScene, gameOverScene, finalScene;
 
     private void Awake()
@@ -49,11 +49,11 @@ public class UIManager : MonoBehaviour
         {
             case GameState.Prepare:
                 PrepareGame();
+                UpdateGoldInfo();
                 break;
             case GameState.MainGame:
                 CalculateRoadDistance();
                 EqualCurrentGold();
-                UpdateGoldInfo();
                 break;
             case GameState.GameOver:
                 break;
@@ -110,23 +110,18 @@ public class UIManager : MonoBehaviour
             yellowStars[i - 1].SetActive(false);
         }
     }
-    
+
     private void CalculateRoadDistance()
     {
         distanceSlider.maxValue = distanceFinish.gameObject.transform.localPosition.z;
         distanceSlider.value = player.gameObject.transform.localPosition.z;
     }
-    
+
     private void SetGoldZeroOnStart()
     {
         gold = 0;
     }
 
-    public void EarnGoldByCollectables()
-    {
-        gold++;
-    }
-    
     private void EqualCurrentGold()
     {
         currentGoldText.text = gold.ToString();
@@ -137,7 +132,7 @@ public class UIManager : MonoBehaviour
         earnedGoldText.text = currentGoldText.text;
         totalGoldText.text = PlayerPrefs.GetInt("TotalGold").ToString();
     }
-    
+
     private void SetPlayerPrefs()
     {
         if (!PlayerPrefs.HasKey("TotalGold"))
@@ -161,9 +156,8 @@ public class UIManager : MonoBehaviour
 
     public IEnumerator DurationGameOverUI()
     {
-        // Bu method player OnCollisionEnter'da player kaybettigi zaman coroutine olarak calistirilacak.
         yield return new WaitForSeconds(2f);
-        gameOverScene.SetActive(true);
+        GameOverPanel();
     }
 
     public void RetryButton()
