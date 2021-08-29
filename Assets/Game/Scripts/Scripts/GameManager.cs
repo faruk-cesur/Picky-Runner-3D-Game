@@ -64,12 +64,12 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(0);
+        UIManager.Instance.RetryButton();
     }
 
     public void NextLevel()
     {
-        SceneManager.LoadScene(0);
+        UIManager.Instance.NextLevelButton();
     }
 
     public void GameOver()

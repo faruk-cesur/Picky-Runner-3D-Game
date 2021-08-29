@@ -6,51 +6,17 @@ using UnityEngine.UI;
 
 public class Finish : MonoBehaviour
 {
-    public PlayerController player;
-
-    [SerializeField] private Slider slider;
-    [SerializeField] private Transform currentPlayerPos;
-
-    private float playerStartPosZ, finishLinePosZ, totalPathLength;
-
-    private void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        GetStartingPositions();
-    }
-
-    private void Update()
-    {
-        switch (GameManager.Instance.CurrentGameState)
+        PlayerController player = other.GetComponentInParent<PlayerController>();
+        if (player)
         {
-            case GameState.Prepare:
-                break;
-            case GameState.MainGame:
-                CalculatePlayerDistance();
-                break;
-            case GameState.GameOver:
-                break;
-            case GameState.FinishGame:
-                break;
-        }
-    }
-
-    private void GetStartingPositions()
-    {
-        playerStartPosZ = currentPlayerPos.position.z;
-        finishLinePosZ = transform.position.z;
-        totalPathLength = finishLinePosZ - playerStartPosZ;
-    }
-
-    private void CalculatePlayerDistance()
-    {
-        float completedPathRatio = currentPlayerPos.position.z / totalPathLength;
-        slider.value = completedPathRatio;
-        if (completedPathRatio >= 1f)
-        {
-            player.PlayerSpeedDown();
             player.finishCam = true;
-            UIManager.Instance.FinishGamePanel();
+            player.PlayerSpeedDown();
+            PlayerPrefs.SetInt("TotalGold", UIManager.Instance.gold + PlayerPrefs.GetInt("TotalGold"));
             AnimationController.Instance.ActivateVictoryAnim();
+            UIManager.Instance.UpdateGoldInfo();
+            StartCoroutine(UIManager.Instance.DurationFinishUI());
             GameManager.Instance.CurrentGameState = GameState.FinishGame;
         }
     }
