@@ -182,6 +182,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(AnimationController.Instance.ActivateJumpAnim());
                 StartCoroutine(JumpPosition());
                 StartCoroutine(PlayerMovingBool());
+                Destroy(other.gameObject, 1.5f);
             }
         }
 
