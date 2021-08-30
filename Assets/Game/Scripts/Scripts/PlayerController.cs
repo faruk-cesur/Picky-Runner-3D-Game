@@ -23,8 +23,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject playerModelChild;
     [SerializeField] private GameObject baseballObject;
     [SerializeField] private GameObject axeObject;
+    [SerializeField] private GameObject pickaxeObject;
+    [SerializeField] private GameObject spearObject;
+    [SerializeField] private GameObject swordObject;
+    [SerializeField] private GameObject thorHammerObject;
     [SerializeField] private GameObject yellowCapObject;
     [SerializeField] private GameObject lifeBuoyObject;
+    [SerializeField] private GameObject backpackObject;
+    [SerializeField] private GameObject hairDryerObject;
+    [SerializeField] private GameObject pillowObject;
+    [SerializeField] private GameObject umbrellaObject;
 
     [SerializeField] private RayfireRigid rayfireRigid;
 
@@ -141,6 +149,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+
         AxeDoor axeDoor = other.GetComponentInParent<AxeDoor>();
         if (axeDoor)
         {
@@ -151,6 +160,51 @@ public class PlayerController : MonoBehaviour
                 _isPlayerSelectedDoor = true;
             }
         }
+
+        PickaxeDoor pickaxeDoor = other.GetComponentInParent<PickaxeDoor>();
+        if (pickaxeDoor)
+        {
+            if (!_isPlayerSelectedDoor)
+            {
+                _isWallBreakable = true;
+                pickaxeObject.SetActive(true);
+                _isPlayerSelectedDoor = true;
+            }
+        }
+
+        SpearDoor spearDoor = other.GetComponentInParent<SpearDoor>();
+        if (spearDoor)
+        {
+            if (!_isPlayerSelectedDoor)
+            {
+                _isWallBreakable = true;
+                spearObject.SetActive(true);
+                _isPlayerSelectedDoor = true;
+            }
+        }
+
+        SwordDoor swordDoor = other.GetComponentInParent<SwordDoor>();
+        if (swordDoor)
+        {
+            if (!_isPlayerSelectedDoor)
+            {
+                _isWallBreakable = true;
+                swordObject.SetActive(true);
+                _isPlayerSelectedDoor = true;
+            }
+        }
+
+        ThorHammerDoor thorHammerDoor = other.GetComponentInParent<ThorHammerDoor>();
+        if (thorHammerDoor)
+        {
+            if (!_isPlayerSelectedDoor)
+            {
+                _isWallBreakable = true;
+                thorHammerObject.SetActive(true);
+                _isPlayerSelectedDoor = true;
+            }
+        }
+
 
         YellowCapDoor yellowCapDoor = other.GetComponentInParent<YellowCapDoor>();
         if (yellowCapDoor)
@@ -170,6 +224,50 @@ public class PlayerController : MonoBehaviour
             {
                 _isWallBreakable = false;
                 lifeBuoyObject.SetActive(true);
+                _isPlayerSelectedDoor = true;
+            }
+        }
+
+        BackpackDoor backpackDoor = other.GetComponentInParent<BackpackDoor>();
+        if (backpackDoor)
+        {
+            if (!_isPlayerSelectedDoor)
+            {
+                _isWallBreakable = false;
+                backpackObject.SetActive(true);
+                _isPlayerSelectedDoor = true;
+            }
+        }
+
+        HairDryerDoor hairDryerDoor = other.GetComponentInParent<HairDryerDoor>();
+        if (hairDryerDoor)
+        {
+            if (!_isPlayerSelectedDoor)
+            {
+                _isWallBreakable = false;
+                hairDryerObject.SetActive(true);
+                _isPlayerSelectedDoor = true;
+            }
+        }
+
+        PillowDoor pillowDoor = other.GetComponentInParent<PillowDoor>();
+        if (pillowDoor)
+        {
+            if (!_isPlayerSelectedDoor)
+            {
+                _isWallBreakable = false;
+                pillowObject.SetActive(true);
+                _isPlayerSelectedDoor = true;
+            }
+        }
+
+        UmbrellaDoor umbrellaDoor = other.GetComponentInParent<UmbrellaDoor>();
+        if (umbrellaDoor)
+        {
+            if (!_isPlayerSelectedDoor)
+            {
+                _isWallBreakable = false;
+                umbrellaObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
             }
         }
