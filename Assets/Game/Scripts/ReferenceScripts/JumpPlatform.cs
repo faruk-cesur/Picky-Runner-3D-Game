@@ -4,5 +4,15 @@ using UnityEngine;
 
 public class JumpPlatform : MonoBehaviour
 {
-    // Reference Script
+    public PlayerController player;
+    private float _playerPositionZ;
+    private void Update()
+    {
+        _playerPositionZ = player.transform.position.z;
+
+        if (_playerPositionZ-5 > transform.position.z)
+        {
+            Destroy(gameObject);
+        }
+    }
 }

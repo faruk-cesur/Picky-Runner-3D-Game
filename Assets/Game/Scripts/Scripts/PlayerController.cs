@@ -118,6 +118,7 @@ public class PlayerController : MonoBehaviour
             if (!_isWallBreakable)
             {
                 PlayerDeath();
+                UIManager.Instance.wrongItem.SetActive(true);
             }
             else
             {
@@ -280,7 +281,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(AnimationController.Instance.ActivateJumpAnim());
                 StartCoroutine(JumpPosition());
                 StartCoroutine(PlayerMovingBool());
-                Destroy(other.gameObject, 1.5f);
+                //Destroy(other.gameObject, 1.5f);
             }
         }
 
@@ -293,7 +294,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(PlayerMovingBool());
                 StartCoroutine(PlayerSlidePositionY());
                 CameraManager.Instance.isSlideCamera = false;
-                Destroy(other.gameObject, 0.8f);
+                //Destroy(other.gameObject, 0.8f);
             }
         }
 
@@ -307,6 +308,7 @@ public class PlayerController : MonoBehaviour
                 if (UIManager.Instance.energySlider.value < 1)
                 {
                     PlayerDeath();
+                    UIManager.Instance.energyWasNotEnough.SetActive(true);
                 }
                 else if (!_isPlayerUsedEnergy)
                 {
@@ -389,9 +391,17 @@ public class PlayerController : MonoBehaviour
     private void DisappearObjects()
     {
         baseballObject.SetActive(false);
-        yellowCapObject.SetActive(false);
         axeObject.SetActive(false);
+        pickaxeObject.SetActive(false);
+        spearObject.SetActive(false);
+        swordObject.SetActive(false);
+        thorHammerObject.SetActive(false);
+        yellowCapObject.SetActive(false);
         lifeBuoyObject.SetActive(false);
+        backpackObject.SetActive(false);
+        hairDryerObject.SetActive(false);
+        pillowObject.SetActive(false);
+        umbrellaObject.SetActive(false);
     }
 
     private void PlayerDeath()

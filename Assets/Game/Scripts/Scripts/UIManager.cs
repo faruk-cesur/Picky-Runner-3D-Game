@@ -13,8 +13,7 @@ public class UIManager : MonoBehaviour
     public PlayerController player;
     public Slider energySlider;
     public Slider distanceSlider;
-    public GameObject energySliderObject;
-    public GameObject distanceFinish;
+    public GameObject energySliderObject,distanceFinish,energyWasNotEnough,wrongItem;
     public TextMeshProUGUI currentGoldText;
     public TextMeshProUGUI earnedGoldText;
     public TextMeshProUGUI totalGoldText;
@@ -69,6 +68,8 @@ public class UIManager : MonoBehaviour
         gamePlayScene.SetActive(false);
         gameOverScene.SetActive(false);
         finalScene.SetActive(false);
+        energyWasNotEnough.SetActive(false);
+        wrongItem.SetActive(false);
     }
 
     public void GamePlay()
