@@ -14,35 +14,20 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool finishCam;
 
-    [SerializeField] private float runSpeed;
-    [SerializeField] private float slideSpeed;
-    [SerializeField] private float maxSlideAmount;
+    [SerializeField] private float runSpeed,slideSpeed,maxSlideAmount;
 
     [SerializeField] private Transform playerModel;
 
     [SerializeField] private GameObject playerModelChild;
-    [SerializeField] private GameObject baseballObject;
-    [SerializeField] private GameObject axeObject;
-    [SerializeField] private GameObject pickaxeObject;
-    [SerializeField] private GameObject spearObject;
-    [SerializeField] private GameObject swordObject;
-    [SerializeField] private GameObject thorHammerObject;
-    [SerializeField] private GameObject yellowCapObject;
-    [SerializeField] private GameObject lifeBuoyObject;
-    [SerializeField] private GameObject backpackObject;
-    [SerializeField] private GameObject hairDryerObject;
-    [SerializeField] private GameObject pillowObject;
-    [SerializeField] private GameObject umbrellaObject;
-
+    [SerializeField] private GameObject baseballObject,axeObject,pickaxeObject,spearObject,swordObject,thorHammerObject,yellowCapObject,lifeBuoyObject,backpackObject,hairDryerObject,pillowObject,umbrellaObject;
+    [SerializeField] private GameObject particleCollectable,particleFiveStars,particleBuffDoor;
+    
     [SerializeField] private RayfireRigid rayfireRigid;
 
-    private bool _isWallBreakable;
-    private bool _isPlayerSelectedDoor;
-    private bool _isPlayerJumped;
-    private bool _isPlayerMoved;
-    private bool _isPlayerSlideJump;
-    private bool _isPlayerUsedEnergy;
-    private bool _isTriggerAttack;
+    private bool _isWallBreakable,_isPlayerSelectedDoor,_isPlayerJumped,_isPlayerMoved,_isPlayerSlideJump,_isPlayerUsedEnergy,_isTriggerAttack,_isParticleStarTrail;
+    
+    private GameObject _particleStarTrailTemp;
+
 
     #endregion
 
@@ -62,6 +47,7 @@ public class PlayerController : MonoBehaviour
             case GameState.MainGame:
                 VerticleMovement(runSpeed);
                 HorizontalMovement(slideSpeed);
+                FiveStarParticle();
                 break;
             case GameState.GameOver:
                 break;
@@ -365,6 +351,7 @@ public class PlayerController : MonoBehaviour
         CompleteStarBuff completeStarBuff = other.GetComponentInParent<CompleteStarBuff>();
         if (completeStarBuff)
         {
+            Instantiate(particleBuffDoor, playerModel.transform.position,Quaternion.identity);
             UIManager.Instance.energySlider.value += 5;
             UIManager.Instance.EnergySliderStars();
             Destroy(other.gameObject);
@@ -373,6 +360,7 @@ public class PlayerController : MonoBehaviour
         Collectable collectable = other.GetComponentInParent<Collectable>();
         if (collectable)
         {
+            Instantiate(particleCollectable, playerModel.transform.position+new Vector3(0,2,0),Quaternion.identity);
             UIManager.Instance.energySlider.value++;
             UIManager.Instance.EnergySliderStars();
             Destroy(other.gameObject);
@@ -415,6 +403,24 @@ public class PlayerController : MonoBehaviour
     {
         UIManager.Instance.EnergySliderStars();
         StartCoroutine(PlayerUsedEnergyBool());
+    }
+
+    private void FiveStarParticle()
+    {
+        if (UIManager.Instance.energySlider.value >= 5f)
+        {
+            if (!_isParticleStarTrail)
+            {
+                _particleStarTrailTemp = Instantiate(particleFiveStars,playerModel.transform.position,new Quaternion(-90,0,0,90));
+                _particleStarTrailTemp.transform.SetParent(playerModel);
+                _isParticleStarTrail = true;
+            }
+        }
+        else
+        {
+            Destroy(_particleStarTrailTemp);
+            _isParticleStarTrail = false;
+        }
     }
 
     #endregion

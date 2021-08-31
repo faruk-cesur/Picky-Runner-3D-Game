@@ -11,17 +11,17 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
 
     public PlayerController player;
-    public Slider energySlider;
-    public Slider distanceSlider;
+    
+    public Slider energySlider,distanceSlider;
+    
     public GameObject energySliderObject,distanceFinish,energyWasNotEnough,wrongItem;
-    public TextMeshProUGUI currentGoldText;
-    public TextMeshProUGUI earnedGoldText;
-    public TextMeshProUGUI totalGoldText;
-    public TextMeshProUGUI sliderLevelText;
+    
+    public TextMeshProUGUI currentGoldText,earnedGoldText,totalGoldText,sliderLevelText;
+    
     public List<GameObject> yellowStars;
-    [HideInInspector] public int sliderLevel = 1;
-    [HideInInspector] public int gold;
-
+    
+    [HideInInspector] public int sliderLevel = 1, gold;
+    
     [SerializeField] private GameObject prepareScene, gamePlayScene, gameOverScene, finalScene;
 
     private void Awake()
@@ -169,9 +169,8 @@ public class UIManager : MonoBehaviour
 
     public void NextLevelButton()
     {
-        // Bir sonraki level Instantiate edilecek. (Level Manager'dan method cagrilabilir) Simdilik Retry ekliyorum.
-        RetryButton();
         PlayerPrefs.SetInt("SliderLevel", PlayerPrefs.GetInt("SliderLevel") + 1);
         sliderLevelText.text = PlayerPrefs.GetInt("SliderLevel").ToString();
+        LevelManager.Instance.NextLevel();
     }
 }
