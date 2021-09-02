@@ -6,7 +6,17 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
 
-    public AudioClip starBuffSound, collectableSound, deathSound, finishSound, jumpSound, slideSound, smashWallSound,pickItemSound,gameOverSound,beforeAttackSound,afterAttackSound;
+    public AudioClip starBuffSound,
+        collectableSound,
+        deathSound,
+        finishSound,
+        jumpSound,
+        slideSound,
+        smashWallSound,
+        pickItemSound,
+        gameOverSound,
+        beforeAttackSound,
+        afterAttackSound;
 
     private AudioSource _audioSource;
 

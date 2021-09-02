@@ -19,14 +19,13 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public GameObject level1;
-    public GameObject level2;
-    public GameObject level3;
+    public GameObject level1, level2, level3, level4, level5, level6, level7, level8;
 
     public int currentLevel;
 
     private void Start()
     {
+        //PlayerPrefs.DeleteAll();
         SetLevelPlayerPrefs();
         CallLevel();
     }
@@ -68,10 +67,50 @@ public class LevelManager : MonoBehaviour
 
         if (PlayerPrefs.GetInt("CurrentLevel") == 4)
         {
-            currentLevel = 1;
+            currentLevel = 4;
             PlayerPrefs.SetInt("CurrentLevel", currentLevel);
-            level1.SetActive(true);
+            level4.SetActive(true);
             level3.SetActive(false);
+        }
+
+        if (PlayerPrefs.GetInt("CurrentLevel") == 5)
+        {
+            currentLevel = 5;
+            PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+            level5.SetActive(true);
+            level4.SetActive(false);
+        }
+
+        if (PlayerPrefs.GetInt("CurrentLevel") == 6)
+        {
+            currentLevel = 6;
+            PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+            level6.SetActive(true);
+            level5.SetActive(false);
+        }
+
+        if (PlayerPrefs.GetInt("CurrentLevel") == 7)
+        {
+            currentLevel = 7;
+            PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+            level7.SetActive(true);
+            level6.SetActive(false);
+        }
+
+        if (PlayerPrefs.GetInt("CurrentLevel") == 8)
+        {
+            currentLevel = 8;
+            PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+            level8.SetActive(true);
+            level7.SetActive(false);
+        }
+
+        if (PlayerPrefs.GetInt("CurrentLevel") == 9)
+        {
+            currentLevel = 3;
+            PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+            level3.SetActive(true);
+            level8.SetActive(false);
         }
     }
 

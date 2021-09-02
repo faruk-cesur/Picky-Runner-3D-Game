@@ -12,12 +12,7 @@ public class CameraManager : MonoBehaviour
 
     public PlayerController player;
 
-    public Transform playerModel;
-    public Transform cameraPosition;
-    public Transform prepareCam;
-    public Transform mainGameCam;
-    public Transform finishCam;
-    public Transform gameOverCam;
+    public Transform playerModel, cameraPosition, prepareCam, mainGameCam, finishCam, gameOverCam;
 
     [HideInInspector] public bool isSlideCamera;
 

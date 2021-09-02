@@ -16,6 +16,7 @@ public class Finish : MonoBehaviour
             PlayerPrefs.SetInt("TotalGold", UIManager.Instance.gold + PlayerPrefs.GetInt("TotalGold"));
             AnimationController.Instance.ActivateVictoryAnim();
             UIManager.Instance.UpdateGoldInfo();
+            UIManager.Instance.energySliderObject.SetActive(false);
             StartCoroutine(UIManager.Instance.DurationFinishUI());
             GameManager.Instance.CurrentGameState = GameState.FinishGame;
             SoundManager.Instance.PlaySound(SoundManager.Instance.finishSound, 1);

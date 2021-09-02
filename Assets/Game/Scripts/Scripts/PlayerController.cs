@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private GameObject particleCollectable, particleFiveStars, particleBuffDoor;
 
-    [SerializeField] private RayfireRigid rayfireRigid;
+    [SerializeField] private RayfireRigid rayfireRigidWall;
 
     private bool _isWallBreakable,
         _isPlayerSelectedDoor,
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 StartCoroutine(PlayerInteractBool());
-                Invoke(nameof(DisappearObjects), 1f);
+                //Invoke(nameof(DisappearObjects), 1f);
                 _isPlayerSelectedDoor = false;
                 Destroy(other.gameObject, 6);
             }
@@ -404,6 +404,7 @@ public class PlayerController : MonoBehaviour
         Collectable collectable = other.GetComponentInParent<Collectable>();
         if (collectable)
         {
+            UIManager.Instance.gold++;
             Instantiate(particleCollectable, playerModel.transform.position + new Vector3(0, 2, 0),
                 Quaternion.identity);
             SoundManager.Instance.PlaySound(SoundManager.Instance.collectableSound, 0.6f);
@@ -537,6 +538,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1f);
         _isPlayerUsedEnergy = false;
     }
+
     private IEnumerator PlayerInteractBool()
     {
         _isPlayerInteract = true;
@@ -557,17 +559,17 @@ public class PlayerController : MonoBehaviour
         runSpeed = 0;
         playerModelChild.GetComponent<Animator>().applyRootMotion = true;
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
-        SoundManager.Instance.PlaySound(SoundManager.Instance.beforeAttackSound,1f);
+        SoundManager.Instance.PlaySound(SoundManager.Instance.beforeAttackSound, 1f);
 
         yield return new WaitForSeconds(1.55f);
 
-        rayfireRigid.Initialize();
-        rayfireRigid.Fade();
+        rayfireRigidWall.Initialize();
+        rayfireRigidWall.Fade();
         runSpeed = 12;
         playerModelChild.GetComponent<Animator>().applyRootMotion = false;
         playerModelChild.transform.rotation = Quaternion.identity;
         UIManager.Instance.gold += 10;
-        SoundManager.Instance.PlaySound(SoundManager.Instance.afterAttackSound,1f);
+        SoundManager.Instance.PlaySound(SoundManager.Instance.afterAttackSound, 1f);
         SoundManager.Instance.PlaySound(SoundManager.Instance.smashWallSound, 1);
 
 

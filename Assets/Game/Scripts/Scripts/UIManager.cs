@@ -92,7 +92,6 @@ public class UIManager : MonoBehaviour
 
     public void FinishGamePanel()
     {
-        energySliderObject.SetActive(false);
         prepareScene.SetActive(false);
         gamePlayScene.SetActive(false);
         gameOverScene.SetActive(false);
