@@ -18,6 +18,7 @@ public class Finish : MonoBehaviour
             UIManager.Instance.UpdateGoldInfo();
             StartCoroutine(UIManager.Instance.DurationFinishUI());
             GameManager.Instance.CurrentGameState = GameState.FinishGame;
+            SoundManager.Instance.PlaySound(SoundManager.Instance.finishSound, 1);
         }
     }
 }

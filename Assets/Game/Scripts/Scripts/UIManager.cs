@@ -11,17 +11,17 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
 
     public PlayerController player;
-    
-    public Slider energySlider,distanceSlider;
-    
-    public GameObject energySliderObject,distanceFinish,energyWasNotEnough,wrongItem;
-    
-    public TextMeshProUGUI currentGoldText,earnedGoldText,totalGoldText,sliderLevelText;
-    
+
+    public Slider energySlider, distanceSlider;
+
+    public GameObject energySliderObject, distanceFinish, energyWasNotEnough, wrongItem;
+
+    public TextMeshProUGUI currentGoldText, earnedGoldText, totalGoldText, sliderLevelText;
+
     public List<GameObject> yellowStars;
-    
+
     [HideInInspector] public int sliderLevel = 1, gold;
-    
+
     [SerializeField] private GameObject prepareScene, gamePlayScene, gameOverScene, finalScene;
 
     private void Awake()

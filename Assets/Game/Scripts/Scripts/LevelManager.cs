@@ -5,17 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-     public static LevelManager Instance;
+    public static LevelManager Instance;
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     public GameObject level1;
     public GameObject level2;
     public GameObject level3;
-    
+
     public int currentLevel;
 
     private void Start()
@@ -67,8 +74,8 @@ public class LevelManager : MonoBehaviour
             level3.SetActive(false);
         }
     }
-    
-    
+
+
     public void NextLevel()
     {
         currentLevel++;

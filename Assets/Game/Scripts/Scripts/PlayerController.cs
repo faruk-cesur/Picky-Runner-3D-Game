@@ -14,20 +14,41 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool finishCam;
 
-    [SerializeField] private float runSpeed,slideSpeed,maxSlideAmount;
+    [SerializeField] private float runSpeed, slideSpeed, maxSlideAmount;
 
     [SerializeField] private Transform playerModel;
 
     [SerializeField] private GameObject playerModelChild;
-    [SerializeField] private GameObject baseballObject,axeObject,pickaxeObject,spearObject,swordObject,thorHammerObject,yellowCapObject,lifeBuoyObject,backpackObject,hairDryerObject,pillowObject,umbrellaObject;
-    [SerializeField] private GameObject particleCollectable,particleFiveStars,particleBuffDoor;
-    
+
+    [SerializeField] private GameObject baseballObject,
+        axeObject,
+        pickaxeObject,
+        spearObject,
+        swordObject,
+        thorHammerObject,
+        yellowCapObject,
+        lifeBuoyObject,
+        backpackObject,
+        hairDryerObject,
+        pillowObject,
+        umbrellaObject;
+
+    [SerializeField] private GameObject particleCollectable, particleFiveStars, particleBuffDoor;
+
     [SerializeField] private RayfireRigid rayfireRigid;
 
-    private bool _isWallBreakable,_isPlayerSelectedDoor,_isPlayerJumped,_isPlayerMoved,_isPlayerSlideJump,_isPlayerUsedEnergy,_isTriggerAttack,_isParticleStarTrail;
-    
-    private GameObject _particleStarTrailTemp;
+    private bool _isWallBreakable,
+        _isPlayerSelectedDoor,
+        _isPlayerJumped,
+        _isPlayerMoved,
+        _isPlayerSlideJump,
+        _isPlayerUsedEnergy,
+        _isTriggerAttack,
+        _isParticleStarTrail,
+        _isPlayerDead,
+        _isPlayerInteract;
 
+    private GameObject _particleStarTrailTemp;
 
     #endregion
 
@@ -65,30 +86,33 @@ public class PlayerController : MonoBehaviour
         transform.position += Vector3.forward * runSpeed * Time.deltaTime;
     }
 
-    private float mousePosX;
-    private float playerVisualPosX;
+    private float _mousePosX;
+    private float _playerVisualPosX;
 
 
     private void HorizontalMovement(float slideSpeed)
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!_isPlayerInteract)
         {
-            playerVisualPosX = playerModel.localPosition.x;
-            mousePosX = CameraManager.Cam.ScreenToViewportPoint(Input.mousePosition).x;
-        }
+            if (Input.GetMouseButtonDown(0))
+            {
+                _playerVisualPosX = playerModel.localPosition.x;
+                _mousePosX = CameraManager.Cam.ScreenToViewportPoint(Input.mousePosition).x;
+            }
 
-        if (Input.GetMouseButton(0))
-        {
-            float currentMousePosX = CameraManager.Cam.ScreenToViewportPoint(Input.mousePosition).x;
-            float distance = currentMousePosX - mousePosX;
-            float posX = playerVisualPosX + (distance * slideSpeed);
-            Vector3 pos = playerModel.localPosition;
-            pos.x = Mathf.Clamp(posX, -maxSlideAmount, maxSlideAmount);
-            playerModel.localPosition = pos;
-        }
-        else
-        {
-            Vector3 pos = playerModel.localPosition;
+            if (Input.GetMouseButton(0))
+            {
+                float currentMousePosX = CameraManager.Cam.ScreenToViewportPoint(Input.mousePosition).x;
+                float distance = currentMousePosX - _mousePosX;
+                float posX = _playerVisualPosX + (distance * slideSpeed);
+                Vector3 pos = playerModel.localPosition;
+                pos.x = Mathf.Clamp(posX, -maxSlideAmount, maxSlideAmount);
+                playerModel.localPosition = pos;
+            }
+            else
+            {
+                Vector3 pos = playerModel.localPosition;
+            }
         }
     }
 
@@ -108,6 +132,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                StartCoroutine(PlayerInteractBool());
                 Invoke(nameof(DisappearObjects), 1f);
                 _isPlayerSelectedDoor = false;
                 Destroy(other.gameObject, 6);
@@ -119,6 +144,7 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isTriggerAttack && _isWallBreakable)
             {
+                StartCoroutine(PlayerInteractBool());
                 StartCoroutine(TriggerAttackBool());
                 StartCoroutine(AnimationController.Instance.ActivateAttackAnim());
                 StartCoroutine(PlayerAttackBreakWall());
@@ -133,6 +159,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = true;
                 baseballObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -145,6 +172,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = true;
                 axeObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -156,6 +184,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = true;
                 pickaxeObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -167,6 +196,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = true;
                 spearObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -178,6 +208,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = true;
                 swordObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -189,6 +220,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = true;
                 thorHammerObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -201,6 +233,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = false;
                 yellowCapObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -212,6 +245,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = false;
                 lifeBuoyObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -223,6 +257,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = false;
                 backpackObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -234,6 +269,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = false;
                 hairDryerObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -245,6 +281,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = false;
                 pillowObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -256,31 +293,7 @@ public class PlayerController : MonoBehaviour
                 _isWallBreakable = false;
                 umbrellaObject.SetActive(true);
                 _isPlayerSelectedDoor = true;
-            }
-        }
-
-        JumpPlatform jumpPlatform = other.GetComponentInParent<JumpPlatform>();
-        if (jumpPlatform)
-        {
-            if (!_isPlayerMoved)
-            {
-                StartCoroutine(AnimationController.Instance.ActivateJumpAnim());
-                StartCoroutine(JumpPosition());
-                StartCoroutine(PlayerMovingBool());
-                //Destroy(other.gameObject, 1.5f);
-            }
-        }
-
-        SlidePlatform slidePlatform = other.GetComponentInParent<SlidePlatform>();
-        if (slidePlatform)
-        {
-            if (!_isPlayerMoved)
-            {
-                StartCoroutine(AnimationController.Instance.ActivateSlideAnim());
-                StartCoroutine(PlayerMovingBool());
-                StartCoroutine(PlayerSlidePositionY());
-                CameraManager.Instance.isSlideCamera = false;
-                //Destroy(other.gameObject, 0.8f);
+                SoundManager.Instance.PlaySound(SoundManager.Instance.pickItemSound, 0.7f);
             }
         }
 
@@ -316,6 +329,7 @@ public class PlayerController : MonoBehaviour
                 if (UIManager.Instance.energySlider.value < 2)
                 {
                     PlayerDeath();
+                    UIManager.Instance.energyWasNotEnough.SetActive(true);
                 }
                 else if (!_isPlayerUsedEnergy)
                 {
@@ -337,6 +351,7 @@ public class PlayerController : MonoBehaviour
                 if (UIManager.Instance.energySlider.value < 3)
                 {
                     PlayerDeath();
+                    UIManager.Instance.energyWasNotEnough.SetActive(true);
                 }
                 else if (!_isPlayerUsedEnergy)
                 {
@@ -348,10 +363,39 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        JumpPlatform jumpPlatform = other.GetComponentInParent<JumpPlatform>();
+        if (jumpPlatform)
+        {
+            if (!_isPlayerMoved && !_isPlayerDead)
+            {
+                StartCoroutine(PlayerInteractBool());
+                StartCoroutine(AnimationController.Instance.ActivateJumpAnim());
+                StartCoroutine(JumpPosition());
+                StartCoroutine(PlayerMovingBool());
+                SoundManager.Instance.PlaySound(SoundManager.Instance.jumpSound, 0.4f);
+            }
+        }
+
+        SlidePlatform slidePlatform = other.GetComponentInParent<SlidePlatform>();
+        if (slidePlatform)
+        {
+            if (!_isPlayerMoved && !_isPlayerDead)
+            {
+                StartCoroutine(PlayerInteractBool());
+                StartCoroutine(AnimationController.Instance.ActivateSlideAnim());
+                StartCoroutine(PlayerMovingBool());
+                StartCoroutine(PlayerSlidePositionY());
+                CameraManager.Instance.isSlideCamera = false;
+                SoundManager.Instance.PlaySound(SoundManager.Instance.slideSound, 0.5f);
+            }
+        }
+
+
         CompleteStarBuff completeStarBuff = other.GetComponentInParent<CompleteStarBuff>();
         if (completeStarBuff)
         {
-            Instantiate(particleBuffDoor, playerModel.transform.position,Quaternion.identity);
+            Instantiate(particleBuffDoor, playerModel.transform.position, Quaternion.identity);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.starBuffSound, 0.7f);
             UIManager.Instance.energySlider.value += 5;
             UIManager.Instance.EnergySliderStars();
             Destroy(other.gameObject);
@@ -360,7 +404,9 @@ public class PlayerController : MonoBehaviour
         Collectable collectable = other.GetComponentInParent<Collectable>();
         if (collectable)
         {
-            Instantiate(particleCollectable, playerModel.transform.position+new Vector3(0,2,0),Quaternion.identity);
+            Instantiate(particleCollectable, playerModel.transform.position + new Vector3(0, 2, 0),
+                Quaternion.identity);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.collectableSound, 0.6f);
             UIManager.Instance.energySlider.value++;
             UIManager.Instance.EnergySliderStars();
             Destroy(other.gameObject);
@@ -397,6 +443,10 @@ public class PlayerController : MonoBehaviour
         runSpeed = 0;
         GameManager.Instance.GameOver();
         AnimationController.Instance.ActivateDeathAnim();
+        StartCoroutine(SoundManager.Instance.GameOverSound());
+        GameManager.Instance.CurrentGameState = GameState.GameOver;
+        _isPlayerDead = true;
+        _isPlayerInteract = true;
     }
 
     private void UpdateEnergyStars()
@@ -411,7 +461,8 @@ public class PlayerController : MonoBehaviour
         {
             if (!_isParticleStarTrail)
             {
-                _particleStarTrailTemp = Instantiate(particleFiveStars,playerModel.transform.position,new Quaternion(-90,0,0,90));
+                _particleStarTrailTemp = Instantiate(particleFiveStars, playerModel.transform.position,
+                    new Quaternion(-90, 0, 0, 90));
                 _particleStarTrailTemp.transform.SetParent(playerModel);
                 _isParticleStarTrail = true;
             }
@@ -486,6 +537,12 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1f);
         _isPlayerUsedEnergy = false;
     }
+    private IEnumerator PlayerInteractBool()
+    {
+        _isPlayerInteract = true;
+        yield return new WaitForSeconds(1f);
+        _isPlayerInteract = false;
+    }
 
     private IEnumerator PlayerSlidePositionY()
     {
@@ -500,15 +557,19 @@ public class PlayerController : MonoBehaviour
         runSpeed = 0;
         playerModelChild.GetComponent<Animator>().applyRootMotion = true;
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        SoundManager.Instance.PlaySound(SoundManager.Instance.beforeAttackSound,1f);
 
         yield return new WaitForSeconds(1.55f);
 
         rayfireRigid.Initialize();
         rayfireRigid.Fade();
-        runSpeed = 10;
+        runSpeed = 12;
         playerModelChild.GetComponent<Animator>().applyRootMotion = false;
         playerModelChild.transform.rotation = Quaternion.identity;
         UIManager.Instance.gold += 10;
+        SoundManager.Instance.PlaySound(SoundManager.Instance.afterAttackSound,1f);
+        SoundManager.Instance.PlaySound(SoundManager.Instance.smashWallSound, 1);
+
 
         yield return new WaitForSeconds(1.25f);
 

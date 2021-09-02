@@ -4,44 +4,37 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    //[SerializeField] private AudioClip collectableSound;
-    //[SerializeField] private AudioClip finishSound;
-    //[SerializeField] private AudioClip gameOverSound;
-
     public static SoundManager Instance;
-    [HideInInspector] public bool sound;
+
+    public AudioClip starBuffSound, collectableSound, deathSound, finishSound, jumpSound, slideSound, smashWallSound,pickItemSound,gameOverSound,beforeAttackSound,afterAttackSound;
+
     private AudioSource _audioSource;
 
 
     private void Awake()
     {
-        makeSingleton();
-        _audioSource = GetComponent<AudioSource>();
-    }
-
-    private void makeSingleton()
-    {
-        if (Instance != null)
+        if (Instance == null)
         {
-            Destroy(gameObject);
+            Instance = this;
         }
         else
         {
-            Instance = this;
-            DontDestroyOnLoad(this);
+            Destroy(this);
         }
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
-    public void SoundOnOff()
-    {
-        sound = !sound;
-    }
 
     public void PlaySound(AudioClip clip, float volume)
     {
-        if (sound)
-        {
-            _audioSource.PlayOneShot(clip, volume);
-        }
+        _audioSource.PlayOneShot(clip, volume);
+    }
+
+    public IEnumerator GameOverSound()
+    {
+        PlaySound(Instance.deathSound, 1);
+        yield return new WaitForSeconds(2f);
+        PlaySound(Instance.gameOverSound, 1);
     }
 }
