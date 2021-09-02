@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public GameObject level1, level2, level3, level4, level5, level6, level7, level8;
+    public GameObject level1, level2, level3, level4, level5, level6, level7, level8, level9;
 
     public int currentLevel;
 
@@ -107,10 +107,18 @@ public class LevelManager : MonoBehaviour
 
         if (PlayerPrefs.GetInt("CurrentLevel") == 9)
         {
+            currentLevel = 9;
+            PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+            level9.SetActive(true);
+            level8.SetActive(false);
+        }
+        
+        if (PlayerPrefs.GetInt("CurrentLevel") == 10)
+        {
             currentLevel = 3;
             PlayerPrefs.SetInt("CurrentLevel", currentLevel);
             level3.SetActive(true);
-            level8.SetActive(false);
+            level9.SetActive(false);
         }
     }
 
