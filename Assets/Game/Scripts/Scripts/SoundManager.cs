@@ -6,7 +6,7 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
 
-    public AudioClip starBuffSound,
+    public AudioClip fullEnergySound,
         collectableSound,
         deathSound,
         finishSound,

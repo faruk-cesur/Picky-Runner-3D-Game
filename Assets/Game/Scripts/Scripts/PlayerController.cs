@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         pillowObject,
         umbrellaObject;
 
-    [SerializeField] private GameObject particleCollectable, particleFiveStars, particleBuffDoor;
+    [SerializeField] private GameObject particleCollectable, particleFullEnergy, particleFullEnergy2,particleDeathDrink;
 
     [SerializeField] private RayfireRigid rayfireRigidWall;
 
@@ -44,11 +44,12 @@ public class PlayerController : MonoBehaviour
         _isPlayerSlideJump,
         _isPlayerUsedEnergy,
         _isTriggerAttack,
-        _isParticleStarTrail,
+        _isParticleEnergyTrail,
         _isPlayerDead,
         _isPlayerInteract;
 
-    private GameObject _particleStarTrailTemp;
+    private GameObject _particleEnergyTrailTemp;
+    private GameObject _particleFullEnergyTemp;
 
     #endregion
 
@@ -68,7 +69,7 @@ public class PlayerController : MonoBehaviour
             case GameState.MainGame:
                 VerticleMovement(runSpeed);
                 HorizontalMovement(slideSpeed);
-                FiveStarParticle();
+                FullEnergyParticle();
                 break;
             case GameState.GameOver:
                 break;
@@ -133,7 +134,6 @@ public class PlayerController : MonoBehaviour
             else
             {
                 StartCoroutine(PlayerInteractBool());
-                //Invoke(nameof(DisappearObjects), 1f);
                 _isPlayerSelectedDoor = false;
                 Destroy(other.gameObject, 6);
             }
@@ -390,25 +390,24 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
-        CompleteStarBuff completeStarBuff = other.GetComponentInParent<CompleteStarBuff>();
-        if (completeStarBuff)
-        {
-            Instantiate(particleBuffDoor, playerModel.transform.position, Quaternion.identity);
-            SoundManager.Instance.PlaySound(SoundManager.Instance.starBuffSound, 0.7f);
-            UIManager.Instance.energySlider.value += 5;
-            UIManager.Instance.EnergySliderStars();
-            Destroy(other.gameObject);
-        }
-
         Collectable collectable = other.GetComponentInParent<Collectable>();
         if (collectable)
         {
             UIManager.Instance.gold++;
             Instantiate(particleCollectable, playerModel.transform.position + new Vector3(0, 2, 0),
                 Quaternion.identity);
-            SoundManager.Instance.PlaySound(SoundManager.Instance.collectableSound, 0.6f);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.collectableSound, 0.4f);
             UIManager.Instance.energySlider.value++;
+            UIManager.Instance.EnergySliderStars();
+            Destroy(other.gameObject);
+        }
+        
+        DeathDrink deathDrink = other.GetComponentInParent<DeathDrink>();
+        if (deathDrink)
+        {
+            Instantiate(particleDeathDrink, playerModel.transform.position + new Vector3(0, 2, 0),
+                Quaternion.identity);
+            UIManager.Instance.energySlider.value--;
             UIManager.Instance.EnergySliderStars();
             Destroy(other.gameObject);
         }
@@ -456,22 +455,25 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(PlayerUsedEnergyBool());
     }
 
-    private void FiveStarParticle()
+    private void FullEnergyParticle()
     {
         if (UIManager.Instance.energySlider.value >= 5f)
         {
-            if (!_isParticleStarTrail)
+            if (!_isParticleEnergyTrail)
             {
-                _particleStarTrailTemp = Instantiate(particleFiveStars, playerModel.transform.position,
+                _particleFullEnergyTemp = Instantiate(particleFullEnergy2, playerModel.transform.position, Quaternion.identity);
+                SoundManager.Instance.PlaySound(SoundManager.Instance.fullEnergySound, 0.7f);
+                _particleEnergyTrailTemp = Instantiate(particleFullEnergy, playerModel.transform.position,
                     new Quaternion(-90, 0, 0, 90));
-                _particleStarTrailTemp.transform.SetParent(playerModel);
-                _isParticleStarTrail = true;
+                _particleEnergyTrailTemp.transform.SetParent(playerModel);
+                _isParticleEnergyTrail = true;
             }
         }
         else
         {
-            Destroy(_particleStarTrailTemp);
-            _isParticleStarTrail = false;
+            Destroy(_particleEnergyTrailTemp);
+            Destroy(_particleFullEnergyTemp);
+            _isParticleEnergyTrail = false;
         }
     }
 

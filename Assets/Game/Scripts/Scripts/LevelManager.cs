@@ -107,18 +107,10 @@ public class LevelManager : MonoBehaviour
 
         if (PlayerPrefs.GetInt("CurrentLevel") == 9)
         {
-            currentLevel = 9;
-            PlayerPrefs.SetInt("CurrentLevel", currentLevel);
-            level9.SetActive(true);
-            level8.SetActive(false);
-        }
-        
-        if (PlayerPrefs.GetInt("CurrentLevel") == 10)
-        {
             currentLevel = 3;
             PlayerPrefs.SetInt("CurrentLevel", currentLevel);
             level3.SetActive(true);
-            level9.SetActive(false);
+            level8.SetActive(false);
         }
     }
 
