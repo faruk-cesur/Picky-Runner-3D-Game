@@ -567,7 +567,7 @@ public class PlayerController : MonoBehaviour
 
         rayfireRigidWall.Initialize();
         rayfireRigidWall.Fade();
-        runSpeed = 12;
+        runSpeed = 18;
         playerModelChild.GetComponent<Animator>().applyRootMotion = false;
         playerModelChild.transform.rotation = Quaternion.identity;
         UIManager.Instance.gold += 10;
