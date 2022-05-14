@@ -1,5 +1,7 @@
 # Picky Runner 3D Game
 ### This repository is created for Patika.dev Mobile Game Bootcamp V (Final Project 2)
+### Must UNZIP the file below:
+### Picky-Runner-3D-Game\Assets\RayFire\Plugins\Ios\libRF_CNative_ios.zip
 ---
 ### [Click To Watch 1080p HD Fullscreen](https://www.youtube.com/watch?v=p0tRR-_rr50)
 
